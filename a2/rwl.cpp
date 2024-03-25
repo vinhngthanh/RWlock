@@ -7,19 +7,20 @@ using namespace std;
 class ReadWriteLock {
 public:
   ReadWriteLock(){
-    
+    mtx = make_unique<mutex>();
+    readers = 0;
+    writers = 0;
   }
 
   void readLock() {
     unique_lock<mutex> lock(*mtx);
-    while (writers > 0) {
-      cv.wait(lock, [&] { return writers == 0; });
+    while (readers > 0 || writers > 0) {
+      cv.wait(lock, [&] { return writers == 0 && readers == 0; });
     }
     readers++;
   }
 
   void readUnlock() {
-    lock_guard<mutex> lock(*mtx);
     readers--;
     cv.notify_all();
   }
@@ -33,14 +34,13 @@ public:
   }
 
   void writeUnlock() {
-    lock_guard<mutex> lock(*mtx);
     writers--;
     cv.notify_all();
   }
 
 private:
-  unique_ptr<mutex> mtx = make_unique<mutex>();
+  unique_ptr<mutex> mtx;
   condition_variable cv;
-  int readers = 0;
-  int writers = 0;
+  int readers;
+  int writers;
 };
