@@ -88,7 +88,7 @@ int main()
 	}
 	
 	
-	// l = ReadWriteLock();
+	l.init();
 	
 	thread* threads = new thread[p];
 	value = 0;
