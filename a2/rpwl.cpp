@@ -4,9 +4,9 @@
 
 using namespace std;
 
-class ReadWriteLock {
+class ReadPrioritizedWriteLock {
 public:
-  ReadWriteLock(){}
+  ReadPrioritizedWriteLock(){}
 
   void init(){
     mtx = make_unique<mutex>();
@@ -16,13 +16,14 @@ public:
 
   void readLock(){
     unique_lock<mutex> lock(*mtx);
-    while (readers > 0 || writers > 0) {
-      cv.wait(lock, [&] { return writers == 0 && readers == 0; });
+    while (writers > 0) {
+      cv.wait(lock);
     }
     readers++;
   }
 
   void readUnlock(){
+    lock_guard<mutex> lock(*mtx);
     readers--;
     cv.notify_all();
   }
@@ -30,7 +31,7 @@ public:
   void writeLock(){
     unique_lock<mutex> lock(*mtx);
     while (readers > 0 || writers > 0) {
-      cv.wait(lock, [&] { return writers == 0 && readers == 0; });
+      cv.wait(lock);
     }
     writers++;
   }

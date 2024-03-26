@@ -4,45 +4,51 @@
 
 using namespace std;
 
-class ReadWriteLock {
+class ReadWritePrioritizedLock {
 public:
-  ReadWriteLock(){}
+    ReadWritePrioritizedLock(){}
 
-  void init(){
-    mtx = make_unique<mutex>();
-    readers = 0;
-    writers = 0;
-  }
-
-  void readLock(){
-    unique_lock<mutex> lock(*mtx);
-    while (readers > 0 || writers > 0) {
-      cv.wait(lock, [&] { return writers == 0 && readers == 0; });
+    void init(){
+        mtx = make_unique<mutex>();
+        readers = 0;
+        writers = 0;
+        writerRequests = 0;
     }
-    readers++;
-  }
 
-  void readUnlock(){
-    readers--;
-    cv.notify_all();
-  }
-
-  void writeLock(){
-    unique_lock<mutex> lock(*mtx);
-    while (readers > 0 || writers > 0) {
-      cv.wait(lock, [&] { return writers == 0 && readers == 0; });
+    void readLock(){
+        unique_lock<mutex> lock(*mtx);
+        while (readers > 0 || writerRequests > 0 || writers > 0) {
+        cv.wait(lock);
+        }
+        readers++;
     }
-    writers++;
-  }
 
-  void writeUnlock(){
-    writers--;
-    cv.notify_all();
-  }
+    void readUnlock(){
+        lock_guard<mutex> lock(*mtx);
+        readers--;
+        cv.notify_all();
+    }
+
+    void writeLock(){
+        unique_lock<mutex> lock(*mtx);
+        writerRequests++;
+        while (readers > 0 || writers > 0) {
+            cv.wait(lock);
+        }
+        writerRequests--;
+        writers++;
+    }
+
+    void writeUnlock(){
+        lock_guard<mutex> lock(*mtx);
+        writers--;
+        cv.notify_all();
+    }
 
 private:
-  unique_ptr<mutex> mtx;
-  condition_variable cv;
-  int readers;
-  int writers;
+    unique_ptr<mutex> mtx;
+    condition_variable cv;
+    int readers;
+    int writers;
+    int writerRequests;
 };
