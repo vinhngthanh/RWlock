@@ -1,22 +1,25 @@
 #include <mutex>
 #include <condition_variable>
 #include <memory>
+#include <atomic>
 
 using namespace std;
 
 class ReadWriteLock {
 public:
-  ReadWriteLock(){}
+  ReadWriteLock(){
+    init();
+  }
 
   void init(){
     mtx = make_unique<mutex>();
     readers = 0;
-    writers = 0;
+    writers = false;
   }
 
   void readLock(){
     unique_lock<mutex> lock(*mtx);
-    while (readers > 0 || writers > 0) {
+    while (writers) {
       cv.wait(lock);
     }
     readers++;
@@ -29,20 +32,20 @@ public:
 
   void writeLock(){
     unique_lock<mutex> lock(*mtx);
-    while (readers > 0 || writers > 0) {
+    while (readers > 0 || writers) {
       cv.wait(lock);
     }
-    writers++;
+    writers = true;
   }
 
   void writeUnlock(){
-    writers--;
+    writers = false;
     cv.notify_all();
   }
 
 private:
   unique_ptr<mutex> mtx;
   condition_variable cv;
-  int readers;
-  int writers;
+  atomic<int> readers;
+  atomic<bool> writers;
 };
