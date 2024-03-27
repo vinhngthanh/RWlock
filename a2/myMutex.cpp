@@ -5,6 +5,10 @@ using namespace std;
 class MyMutex {
 public:
     MyMutex() {
+        init();
+    }
+
+    void init(){
         locked = false;
     }
 

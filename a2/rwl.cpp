@@ -13,33 +13,33 @@ public:
 
   void init(){
     mtx = make_unique<mutex>();
-    readers = 0;
-    writers = false;
+    readers.store(0);
+    writers.store(false);
   }
 
   void readLock(){
     unique_lock<mutex> lock(*mtx);
-    while (writers) {
+    while (writers.load()) {
       cv.wait(lock);
     }
-    readers++;
+    readers.fetch_add(1);
   }
 
   void readUnlock(){
-    readers--;
+    readers.fetch_sub(1);
     cv.notify_all();
   }
 
   void writeLock(){
     unique_lock<mutex> lock(*mtx);
-    while (readers > 0 || writers) {
+    while (readers.load() > 0 || writers.load()) {
       cv.wait(lock);
     }
-    writers = true;
+    writers.store(true);
   }
 
   void writeUnlock(){
-    writers = false;
+    writers.store(false);
     cv.notify_all();
   }
 

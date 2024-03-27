@@ -13,38 +13,38 @@ public:
 
     void init(){
         mtx = make_unique<mutex>();
-        readers = 0;
-        writers = false;
-        writerRequests = 0;
+        readers.store(0);
+        writers.store(false);
+        writerRequests.store(0);
     }
 
     void readLock(){
         unique_lock<mutex> lock(*mtx);
-        while (writerRequests > 0 || writers) {
+        while (writerRequests.load() > 0 || writers.load()) {
             cv.wait(lock);
         }
-        readers++;
+        readers.fetch_add(1);
     }
 
     void readUnlock(){
         lock_guard<mutex> lock(*mtx);
-        readers--;
+        readers.fetch_sub(1);
         cv.notify_all();
     }
 
     void writeLock(){
         unique_lock<mutex> lock(*mtx);
-        writerRequests++;
-        while (readers > 0 || writers) {
+        writerRequests.fetch_add(1);
+        while (readers.load() > 0 || writers.load()) {
             cv.wait(lock);
         }
-        writerRequests--;
-        writers = true;
+        writerRequests.fetch_sub(1);
+        writers.store(true);
     }
 
     void writeUnlock(){
         lock_guard<mutex> lock(*mtx);
-        writers = false;
+        writers.store(false);
         cv.notify_all();
     }
 
