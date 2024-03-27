@@ -9,16 +9,16 @@ public:
     }
 
     void init(){
-        locked = false;
+        locked.store(false);
     }
 
     void lock() {
-        while (locked.exchange(true, memory_order_acquire)) {
+        while (locked.exchange(true)) {
         }
     }
 
     void unlock() {
-        locked.store(false, memory_order_release);
+        locked.store(false);
     }
 
 private:

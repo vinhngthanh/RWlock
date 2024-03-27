@@ -32,7 +32,9 @@ public:
 
   void readUnlock(){
     readers.fetch_sub(1);
-    cv.notify_all();
+    if(readers.load() == 0){
+      cv.notify_all();
+    }
   }
 
   void writeLock(){
@@ -44,11 +46,8 @@ public:
   }
 
   void writeUnlock(){
-    // lock_guard<mutex> lock(*mtx);
-    myMtx.lock();
     writers.store(false);
     cv.notify_all();
-    myMtx.unlock();
   }
 
 private:
