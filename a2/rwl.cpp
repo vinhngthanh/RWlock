@@ -2,6 +2,7 @@
 #include <condition_variable>
 #include <memory>
 #include <atomic>
+#include "myMutex.cpp"
 
 using namespace std;
 
@@ -12,40 +13,39 @@ public:
   }
 
   void init(){
-    mtx = make_unique<mutex>();
+    mtx.init();
+    rmtx.init();
     readers.store(0);
-    writers.store(false);
   }
 
   void readLock(){
-    unique_lock<mutex> lock(*mtx);
-    while (writers.load()) {
-      cv.wait(lock);
+    rmtx.lock();
+    if(readers.load() == 0){
+        mtx.lock();
     }
     readers.fetch_add(1);
+    rmtx.unlock();
   }
 
   void readUnlock(){
+    rmtx.lock();
     readers.fetch_sub(1);
-    cv.notify_all();
+    if(readers.load() == 0){
+        mtx.unlock();
+    }
+    rmtx.unlock();
   }
 
   void writeLock(){
-    unique_lock<mutex> lock(*mtx);
-    while (readers.load() > 0 || writers.load()) {
-      cv.wait(lock);
-    }
-    writers.store(true);
+    mtx.lock();
   }
 
   void writeUnlock(){
-    writers.store(false);
-    cv.notify_all();
+    mtx.unlock();
   }
 
 private:
-  unique_ptr<mutex> mtx;
-  condition_variable cv;
-  atomic<int> readers;
-  atomic<bool> writers;
+    MyMutex mtx;
+    MyMutex rmtx;
+    atomic<int> readers;
 };

@@ -2,56 +2,55 @@
 #include <condition_variable>
 #include <memory>
 #include <atomic>
+#include "myMutex.cpp"
 
 using namespace std;
 
 class ReadWritePrioritizedLock {
 public:
-    ReadWritePrioritizedLock(){
-        init();
-    }
+  ReadWritePrioritizedLock(){
+    init();
+  }
 
-    void init(){
-        mtx = make_unique<mutex>();
-        readers.store(0);
-        writers.store(false);
-        writerRequests.store(0);
-    }
+  void init(){
+    mtx.init();
+    rmtx.init();
+    readers.store(0);
+    writerRequest.store(0);
+  }
 
-    void readLock(){
-        unique_lock<mutex> lock(*mtx);
-        while (writerRequests.load() > 0 || writers.load()) {
-            cv.wait(lock);
-        }
-        readers.fetch_add(1);
+  void readLock(){
+    while(writerRequest.load() > 0){}
+    rmtx.lock();
+    if(readers.load() == 0){
+        mtx.lock();
     }
+    readers.fetch_add(1);
+    rmtx.unlock();
+  }
 
-    void readUnlock(){
-        lock_guard<mutex> lock(*mtx);
-        readers.fetch_sub(1);
-        cv.notify_all();
+  void readUnlock(){
+    rmtx.lock();
+    readers.fetch_sub(1);
+    if(readers.load() == 0){
+        mtx.unlock();
     }
+    rmtx.unlock();
+  }
 
-    void writeLock(){
-        unique_lock<mutex> lock(*mtx);
-        writerRequests.fetch_add(1);
-        while (readers.load() > 0 || writers.load()) {
-            cv.wait(lock);
-        }
-        writerRequests.fetch_sub(1);
-        writers.store(true);
-    }
+  void writeLock(){
+    writerRequest.fetch_add(1);
+    mtx.lock();
+    writerRequest.fetch_sub(1);
+  }
 
-    void writeUnlock(){
-        lock_guard<mutex> lock(*mtx);
-        writers.store(false);
-        cv.notify_all();
-    }
+  void writeUnlock(){
+    mtx.unlock();
+  }
 
 private:
-    unique_ptr<mutex> mtx;
-    condition_variable cv;
+    MyMutex mtx;
+    MyMutex rmtx;
     atomic<int> readers;
-    atomic<bool> writers;
-    atomic<int> writerRequests;
+    atomic<int> writerRequest;
 };

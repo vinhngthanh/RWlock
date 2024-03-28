@@ -13,48 +13,44 @@ public:
   }
 
   void init(){
-    mtx = make_unique<mutex>();
-    myMtx.init();
+    mtx.init();
+    rmtx.init();
     readers.store(0);
-    readerRequests.store(0);
-    writers.store(false);
+    readerRequest.store(0);
   }
 
   void readLock(){
-    unique_lock<mutex> lock(*mtx);
-    readerRequests.fetch_add(1);
-    while (writers.load()) {
-      cv.wait(lock);
+    rmtx.lock();
+    readerRequest.fetch_add(1);
+    if(readers.load() == 0){
+        mtx.lock();
     }
-    readerRequests.fetch_sub(1);
+    readerRequest.fetch_sub(1);
     readers.fetch_add(1);
+    rmtx.unlock();
   }
 
   void readUnlock(){
+    rmtx.lock();
     readers.fetch_sub(1);
     if(readers.load() == 0){
-      cv.notify_all();
+        mtx.unlock();
     }
+    rmtx.unlock();
   }
 
   void writeLock(){
-    unique_lock<mutex> lock(*mtx);
-    while (readers.load() > 0 || writers.load() || readerRequests.load() > 0) {
-      cv.wait(lock);
-    }
-    writers.store(true);
+    while(readerRequest.load() > 0){}
+    mtx.lock();
   }
 
   void writeUnlock(){
-    writers.store(false);
-    cv.notify_all();
+    mtx.unlock();
   }
 
 private:
-  unique_ptr<mutex> mtx;
-  condition_variable cv;
-  MyMutex myMtx;
-  atomic<int> readers;
-  atomic<int> readerRequests;
-  atomic<bool> writers;
+    MyMutex mtx;
+    MyMutex rmtx;
+    atomic<int> readers;
+    atomic<int> readerRequest;
 };
