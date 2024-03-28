@@ -37,43 +37,33 @@ II, Explanation of code:
         the lock, it can continue to take the lock too because many readers can take the lock at the same time. For the readUnlock function, since
         we have a lot of readers having the lock at the same time, calling unlock early can lead to wrong answer so we decrement the reader by 1
         each time the function is called. Only when reader is 0 we will release the lock for contest. writeLock and writeUnlock just try to take the
-        lock and release the lock in this case.
-III, How to run:
-    1, knapsack_v3.c:
-        Locate to the knapsack folder.
-        Compile: gcc knapsack_v3.c -o knapsack_v3 -pthread
+        lock and release the lock in this case. During testing, I realized that the variables can somehow be affected even when I use atomic so I
+        has to created another mutex called rmtx to lock the readLock and readUnlock function.
+    rpwl.cpp:
+        In this read write lock implementation that prioritizes reading, everything is the same as the rwl with an addition of an atomic integer
+        called readerRequest. When a reading thread calls readLock, the readerRequest will be incremented by 1 to signal that there are readers 
+        waiting. In the writeLock function, there is a while loop that check readerRequest > 0. If there are readers waiting, it will not compete
+        for the lock. Once the reader aquired the lock, the readerRequest will be decremented to signal that it has left the queue.
+     rwpl.cpp:
+        In this read write lock implementation that prioritizes writing, everything is almost the same as rpwl.cpp but instead of keeping
+        reader requests, we keep track of writer requests.
+III, Observation:
+    My summary shows that the version using myMutex instead of the rwl is slower in test case 1 but not by a lot. For other test cases, it is 
+    faster. I did think about it a lot because the version using myMutex only allow one thread at a time so it should be slower. But in this case,
+    I think my rwl is too heavily implemented that it is somehow slower.
+IV, How to run:
+    1, test{i}.cpp (i is the program you want to run):
+        Locate to the a2 folder.
+        Example compile and run of test1.cpp file with test1.txt as input.
+        Compile: g++ test1.cpp -o test1
         Run: 
-            Linux: cat ../a1/inputs/(test number).txt | ./knapsack_v3 (number of threads)
-            Window - powershell: Get-Content '..\\a1\\inputs\\(test number).txt' | .\\knapsack_v3.exe (number of threads)
+            Linux: cat ./tests/test1.txt | ./test1
         Output location: Terminal
 
-    2, 258_run.c:
-        Locate to the output folder.
-        Compile: gcc 258_run.c -o 258_run
-        Run: ./258_run
-        Output location: 258_output.txt
+    2, runner.py:
+        Run: python runner.py
+        Output location: output{1-4}.txt
 
-    3, 458_run.c:
-        Locate to the output folder.
-        Compile: gcc 458_run.c -o 458_run
-        Run: ./458_run
-        Output location: 458_output.txt
-
-    4, original_run.c:
-        Locate to the output folder.
-        Compile: gcc original_run.c -o original_run
-        Run: ./original_run
-        Output location: original_output.txt
-
-    5, 258_report.py:
-        Locate to the report folder.
-        Run: python ./258_report.py
-        Output location: averages.txt
-
-    6, 458_report.py:
-        Locate to the report folder.
-        Run: python ./458_report.py
-        Output location: 458_report.txt
-    
-    7, graphs.ipynb:
-        Open the graphs.ipynb file and run.
+    3, summary.py:
+        Run: python summary.py
+        Output location: summary.txt
