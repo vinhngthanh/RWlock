@@ -1,0 +1,126 @@
+Running test4 on test 1 iteration 1:
+Duration: 146.342 miliseconds.
+Running test4 on test 1 iteration 2:
+Duration: 143.666 miliseconds.
+Running test4 on test 1 iteration 3:
+Duration: 146.023 miliseconds.
+Running test4 on test 1 iteration 4:
+Duration: 144.091 miliseconds.
+Running test4 on test 1 iteration 5:
+Duration: 145.606 miliseconds.
+Running test4 on test 1 iteration 6:
+Duration: 144.743 miliseconds.
+Running test4 on test 1 iteration 7:
+Duration: 143.03 miliseconds.
+Running test4 on test 1 iteration 8:
+Duration: 143.801 miliseconds.
+Running test4 on test 1 iteration 9:
+Duration: 141.624 miliseconds.
+Running test4 on test 1 iteration 10:
+Duration: 144.969 miliseconds.
+
+Running test4 on test 2 iteration 1:
+Duration: 287.161 miliseconds.
+Running test4 on test 2 iteration 2:
+Duration: 284.315 miliseconds.
+Running test4 on test 2 iteration 3:
+Duration: 285.398 miliseconds.
+Running test4 on test 2 iteration 4:
+Duration: 292.645 miliseconds.
+Running test4 on test 2 iteration 5:
+Duration: 290.849 miliseconds.
+Running test4 on test 2 iteration 6:
+Duration: 286.958 miliseconds.
+Running test4 on test 2 iteration 7:
+Duration: 293.256 miliseconds.
+Running test4 on test 2 iteration 8:
+Duration: 287.274 miliseconds.
+Running test4 on test 2 iteration 9:
+Duration: 286.732 miliseconds.
+Running test4 on test 2 iteration 10:
+Duration: 294.358 miliseconds.
+
+Running test4 on test 3 iteration 1:
+Duration: 132.353 miliseconds.
+Running test4 on test 3 iteration 2:
+Duration: 134.196 miliseconds.
+Running test4 on test 3 iteration 3:
+Duration: 135.042 miliseconds.
+Running test4 on test 3 iteration 4:
+Duration: 131.513 miliseconds.
+Running test4 on test 3 iteration 5:
+Duration: 132.123 miliseconds.
+Running test4 on test 3 iteration 6:
+Duration: 130.93 miliseconds.
+Running test4 on test 3 iteration 7:
+Duration: 131.45 miliseconds.
+Running test4 on test 3 iteration 8:
+Duration: 134.245 miliseconds.
+Running test4 on test 3 iteration 9:
+Duration: 130.991 miliseconds.
+Running test4 on test 3 iteration 10:
+Duration: 132.808 miliseconds.
+
+Running test4 on test 4 iteration 1:
+Duration: 307.037 miliseconds.
+Running test4 on test 4 iteration 2:
+Duration: 309.388 miliseconds.
+Running test4 on test 4 iteration 3:
+Duration: 317.294 miliseconds.
+Running test4 on test 4 iteration 4:
+Duration: 320.325 miliseconds.
+Running test4 on test 4 iteration 5:
+Duration: 314.312 miliseconds.
+Running test4 on test 4 iteration 6:
+Duration: 312.663 miliseconds.
+Running test4 on test 4 iteration 7:
+Duration: 321.069 miliseconds.
+Running test4 on test 4 iteration 8:
+Duration: 322.621 miliseconds.
+Running test4 on test 4 iteration 9:
+Duration: 316.689 miliseconds.
+Running test4 on test 4 iteration 10:
+Duration: 321.293 miliseconds.
+
+Running test4 on test 5 iteration 1:
+Duration: 150.242 miliseconds.
+Running test4 on test 5 iteration 2:
+Duration: 144.531 miliseconds.
+Running test4 on test 5 iteration 3:
+Duration: 146.302 miliseconds.
+Running test4 on test 5 iteration 4:
+Duration: 145.932 miliseconds.
+Running test4 on test 5 iteration 5:
+Duration: 146.34 miliseconds.
+Running test4 on test 5 iteration 6:
+Duration: 144.476 miliseconds.
+Running test4 on test 5 iteration 7:
+Duration: 152.161 miliseconds.
+Running test4 on test 5 iteration 8:
+Duration: 149.405 miliseconds.
+Running test4 on test 5 iteration 9:
+Duration: 145.773 miliseconds.
+Running test4 on test 5 iteration 10:
+Duration: 149.265 miliseconds.
+
+Running test4 on test 6 iteration 1:
+Duration: 327.234 miliseconds.
+Running test4 on test 6 iteration 2:
+Duration: 329.155 miliseconds.
+Running test4 on test 6 iteration 3:
+Duration: 322.56 miliseconds.
+Running test4 on test 6 iteration 4:
+Duration: 330.363 miliseconds.
+Running test4 on test 6 iteration 5:
+Duration: 330.267 miliseconds.
+Running test4 on test 6 iteration 6:
+Duration: 329.644 miliseconds.
+Running test4 on test 6 iteration 7:
+Duration: 328.853 miliseconds.
+Running test4 on test 6 iteration 8:
+Duration: 336.023 miliseconds.
+Running test4 on test 6 iteration 9:
+Duration: 326.538 miliseconds.
+Running test4 on test 6 iteration 10:
+Duration: 331.014 miliseconds.
+

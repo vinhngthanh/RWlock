@@ -1,0 +1,52 @@
+Average time running test1.cpp 10 times on test case 1:
+127.57
+Average time running test1.cpp 10 times on test case 2:
+313.17
+Average time running test1.cpp 10 times on test case 3:
+139.66
+Average time running test1.cpp 10 times on test case 4:
+377.04
+Average time running test1.cpp 10 times on test case 5:
+166.29
+Average time running test1.cpp 10 times on test case 6:
+440.26
+
+Average time running test2.cpp 10 times on test case 1:
+134.19
+Average time running test2.cpp 10 times on test case 2:
+357.95
+Average time running test2.cpp 10 times on test case 3:
+145.22
+Average time running test2.cpp 10 times on test case 4:
+410.91
+Average time running test2.cpp 10 times on test case 5:
+167.26
+Average time running test2.cpp 10 times on test case 6:
+454.4
+
+Average time running test3.cpp 10 times on test case 1:
+132.44
+Average time running test3.cpp 10 times on test case 2:
+322.39
+Average time running test3.cpp 10 times on test case 3:
+143.7
+Average time running test3.cpp 10 times on test case 4:
+401.04
+Average time running test3.cpp 10 times on test case 5:
+178.39
+Average time running test3.cpp 10 times on test case 6:
+456.13
+
+Average time running test4.cpp 10 times on test case 1:
+144.39
+Average time running test4.cpp 10 times on test case 2:
+288.89
+Average time running test4.cpp 10 times on test case 3:
+132.57
+Average time running test4.cpp 10 times on test case 4:
+316.27
+Average time running test4.cpp 10 times on test case 5:
+147.44
+Average time running test4.cpp 10 times on test case 6:
+329.17
+
